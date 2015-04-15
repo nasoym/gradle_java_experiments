@@ -1,2 +1,3 @@
 include 'junit_experiments'
 include 'swing_hello_world'
+include 'dagger_experiments'
