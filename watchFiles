@@ -1,0 +1,48 @@
+#!/bin/bash
+
+function cleanup(){
+  tput sgr0
+  tmuxstatuscolor blue
+  echo
+  exit 0
+}
+trap cleanup SIGTERM SIGINT SIGHUP EXIT
+
+
+INACTIVE_TIMEOUT=$((60 * 15))
+
+function runGradleTask() {
+  tmuxstatuscolor magenta
+  LAST_TASK_EXECUTION=$(date +%s)
+  ./gradlew $@ \
+      && (tput setab 2 ; echo "=SUCCESS========================="; tmuxstatuscolor green) \
+      || (tput setab 1 ; echo "=FAILED=========================="; tmuxstatuscolor red)
+}
+
+
+SPIN_CHARACTERS='-\|/'
+SPIN_INDEX=0
+
+runGradleTask $@
+while true; do
+  WATCHED_FILES="$(find . \( -name "*.java" -o -name "build.gradle" \) -mmin 0.02)"
+  if [ -n "$WATCHED_FILES" ];then
+    tput sgr0
+    tput setab 7
+    # echo "----------"
+    echo
+    runGradleTask $@
+  else 
+    SPIN_INDEX=$(( (SPIN_INDEX+1) %4 ))
+    printf "\r${SPIN_CHARACTERS:$SPIN_INDEX:1}"
+  fi
+  sleep 1.0
+  if [ "$(( $(date +%s) - LAST_TASK_EXECUTION ))" -ge "$INACTIVE_TIMEOUT" ];then
+      tmuxstatuscolor blue
+      tput sgr0
+      echo
+      echo "no change for more than $INACTIVE_TIMEOUT seconds"
+      break
+  fi
+done
+
