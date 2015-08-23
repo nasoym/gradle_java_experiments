@@ -17,17 +17,18 @@ public class PrimeNumberTest {
 
   @Test
   public void test_basic_prime_numbers() {
-    int[] numbers = new int[]{2,3,5,7,11};
+    int[] numbers = new int[]{2,3,5,7,11,13,17,19};
+    /* 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97 …^[2] */
     for(int primeNumber: numbers) {
-      assertThat(PrimeNumber.isPrimeNumber(primeNumber), is(true));
+      assertThat("test prime number: " + primeNumber, PrimeNumber.isPrimeNumber(primeNumber), is(true));
     }
   }
 
   @Test
   public void test_basic_non_prime_numbers() {
-    int[] numbers = new int[]{4,6,8,9,10};
+    int[] numbers = new int[]{4,6,8,9,10,12,14,15,16,18,20};
     for(int nonPrimeNumber: numbers) {
-      assertThat(PrimeNumber.isPrimeNumber(nonPrimeNumber), is(false));
+      assertThat("test non prime number: " + nonPrimeNumber, PrimeNumber.isPrimeNumber(nonPrimeNumber), is(false));
     }
   }
 
