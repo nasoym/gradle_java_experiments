@@ -25,6 +25,14 @@ public class PrimeNumberTest {
   }
 
   @Test
+  public void test_extended_prime_numbers() {
+    int[] numbers = new int[]{23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97};
+    for(int primeNumber: numbers) {
+      assertThat("test prime number: " + primeNumber, PrimeNumber.isPrimeNumber(primeNumber), is(true));
+    }
+  }
+
+  @Test
   public void test_basic_non_prime_numbers() {
     int[] numbers = new int[]{4,6,8,9,10,12,14,15,16,18,20};
     for(int nonPrimeNumber: numbers) {
